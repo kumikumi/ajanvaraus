@@ -1,0 +1,126 @@
+body{
+background-color:#ead1dc;
+}
+
+p.italic{
+font-style: italic;
+}
+
+
+table{
+border: 1px solid black;
+background-color:white;
+
+}
+td {
+border: 1px solid black;
+width: 100px;
+height: 24px;
+}
+
+#virhe {
+	margin: 4px;
+	color: red;
+	font-weight: bold;
+	border-style: groove;
+	width: 600px;
+	background-color: rgb(255, 231, 231);
+	border-color: red;
+	border-width: thick;
+	border-radius: 4;
+}
+
+#virhe p {
+	padding: 4px;
+}
+
+#ilmoitus {
+	margin: 4px;
+	font-weight: bold;
+	border-style: groove;
+	width: 600px;
+	background-color: rgb(224, 255, 226);
+	border-color: green;
+	color: green;
+	border-width: thick;
+	border-radius: 4px;
+}
+
+#ilmoitus p {
+	padding: 4px;
+}
+
+
+#titlebar {
+background-color: #BBA7B0;
+height: 40px;
+
+}
+
+#navbar {
+background-color: #A09298;
+height: 20px;
+margin-bottom: 8px;
+}
+
+#navbar a{
+color:black;
+}
+
+
+#titlebar_image {
+width: 80px;
+height: 20px;
+border: 4px;
+float:left
+}
+
+#page_title {
+float:left
+}
+
+
+#calendar {
+float:left
+
+}
+
+#sidebar{
+float:right
+}
+
+#sidebar_box{
+background-color:white;
+width:180px;
+border: 1px solid black;
+padding:6px;
+margin: 4px;
+}
+
+#page{
+background-color:white;
+width:700px;
+border: 1px solid black;
+padding:6px;
+margin: 4px;
+}
+
+td.unavailable {
+background-color: lightgrey;
+}
+
+td.free {
+background-color: lightgreen;
+}
+
+td.taken {
+background-color: red;
+}
+
+td.confirmed {
+background-color: orange;
+}
+
+td.unconfirmed {
+background-color: yellow;
+}

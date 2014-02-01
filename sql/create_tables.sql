@@ -9,6 +9,10 @@ CREATE TABLE henkilokunta (
 	hlo_id integer PRIMARY KEY references kayttajat
 );
 
+CREATE TABLE johto (
+	joh_id integer PRIMARY KEY references kayttajat
+);
+
 CREATE TABLE asiakas (
 	asiakas_id integer PRIMARY KEY references kayttajat,
 	asiakastili decimal (5,2) default 0.00

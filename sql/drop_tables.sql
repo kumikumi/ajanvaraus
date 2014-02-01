@@ -4,5 +4,6 @@ drop type viikonpv;
 drop table hlokpalvelut;
 drop table palvelu;
 drop table asiakas;
+drop table johto;
 drop table henkilokunta;
 drop table kayttajat;

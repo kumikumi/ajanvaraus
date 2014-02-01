@@ -8,6 +8,11 @@ insert into kayttajat
 VALUES 
 ('essi', 'onion', 'Essi Esimerkki');
 
+insert into kayttajat 
+(kayttajatunnus, salasana, kokonimi)
+VALUES 
+('jorma', 'button', 'Jorma Johtaja');
+
 insert into palvelu
 (kesto, nimi, kuvaus, hinta)
 VALUES
@@ -20,6 +25,9 @@ VALUES
 
 insert into henkilokunta
 select id from kayttajat where kayttajatunnus like 'essi';
+
+insert into johto
+select id from kayttajat where kayttajatunnus like 'jorma';
 
 insert into asiakas
 (asiakas_id)
