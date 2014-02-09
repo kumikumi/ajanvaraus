@@ -14,3 +14,4 @@
             <li>Asiakas, saldo: <?php echo $kayttaja->getSaldo()?></li>
         <?php endif; ?>
     </ul>
+</div>

@@ -8,11 +8,4 @@ require_once 'libs/common.php';
   
   naytaNakyma("kayttajaview.php");
   
-  
-  
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 ?>

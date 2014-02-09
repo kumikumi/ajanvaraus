@@ -30,7 +30,7 @@
 
         <div id="navbar">
             <a class="kalenteri" href="index.php">Kalenteri</a>
-            <a class="rek" href="./palvelut.html">Palvelut</a>
+            <a class="rek" href="./palvelut.php">Palvelut</a>
             <?php
             if (isset($_SESSION['kayttaja'])):
                 $kayttaja = $_SESSION['kayttaja'];
