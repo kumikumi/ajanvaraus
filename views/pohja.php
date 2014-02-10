@@ -41,12 +41,12 @@
                 <?php endif; ?>
 
                 <?php if ($kayttaja->kuuluuHenkilokuntaan()): ?>
-                    <a class="tyovuorot" href="./tyovuorot.html">Työvuorot</a>
+                    <a class="tyovuorot" href="./tyovuorot.php">Työvuorot</a>
                 <?php endif; ?>
-                    
+
                 <?php if ($kayttaja->onJohtaja()): ?>
-                <a class="henkilosto" href="./henkilosto.html">Henkilöstön hallinta</a>
-                <a class="raportit" href="./raportit.html">Raportit</a>
+                    <a class="henkilosto" href="./henkilosto.html">Henkilöstön hallinta</a>
+                    <a class="raportit" href="./raportit.html">Raportit</a>
                 <?php endif; ?>
                 |
 
@@ -61,7 +61,18 @@
 
         <?php if (isset($data->virhe)): ?>
             <div id ="virhe">
-                <p><?php echo $data->virhe; ?></p>
+                <p>Virhe:</p>
+                <?php if (is_array($data->virhe)): ?>
+                <ul>
+                    <?php foreach ($data->virhe as $viesti): ?>
+                        <li><?php echo $viesti ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                
+                <?php else: ?>
+                <p><?php echo $data->virhe ?></p>
+                <?php endif; ?>
+                
             </div>
         <?php endif; ?>
 
