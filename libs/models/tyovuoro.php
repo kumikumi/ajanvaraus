@@ -40,5 +40,22 @@ class Tyovuoro {
         return $tulokset;
     
     }
+    
+    public static function haeTyovuorot() {
+        $sql = "SELECT hlo_id, paiva, aikaviipale from tyovuoro";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tyovuoro = new Tyovuoro($tulos->hlo_id, $tulos->paiva, $tulos->aikaviipale);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään.
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $tulokset[] = $tyovuoro;
+        }
+        return $tulokset;
+    
+    }
+
 
 }

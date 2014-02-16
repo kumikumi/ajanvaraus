@@ -19,30 +19,43 @@
 
 </div>
 
+<h1> Kalenteri </h1>
+<p>Viikko <?php echo $data->viikko ?> (<?php echo $data->vuosi ?>)</p>
+
+<ul>
+    <?php foreach ($data->varaukset as $varaus): ?>
+    <li>Varaus: <?php echo viikonPaivaTekstina(date('N', strtotime($varaus->getPvm())))?></li>
+    <?php endforeach; ?>
+</ul>
+
+<a href='index.php?viikko=<?php echo (($data->viikko)-1) ?>&vuosi=<?php echo ($data->vuosi) ?>'><-- Edellinen viikko</a>
+<a href='index.php'>Nykyinen viikko</a>
+<a href='index.php?viikko=<?php echo (($data->viikko)+1) ?>&vuosi=<?php echo ($data->vuosi) ?>'>Seuraava viikko --></a>
+
 <table class="calendar">
-    <tr><td>klo</td><td>MA</td><td>TI</td><td>KE</td><td>TO</td><td>PE</td><td>LA</td><td>SU</td></tr>
-    <tr><td>8.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>9.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>10.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="free"><a href="varaus.html">varaa</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>11.00-</td><td class="free"><a href="varaus.html">varaa</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="free"><a href="varaus.html">varaa</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>12.00-</td><td class="free"><a href="varaus.html">varaa</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="taken"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>13.00-</td><td class="taken"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td class="free"><a href="varaus.html">varaa</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>14.00-</td><td class="taken"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>15.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>16.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>17.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>18.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>19.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>
+        <td>klo</td>
+        <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
+            <td><?php echo $viikonpv, " ", $data->viikonpaivat[$viikonpv] ?></td>
+        <?php endforeach; ?>
+    </tr>
+
+    <?php for ($i = 0; $i < 24; $i++): ?>
+
+        <tr>
+            <td>
+                <?php if ($i % 2 == 0): echo ($i / 2) + 8, ":00-"; endif;?>
+            </td>
+
+    <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
+                <?php if (isset($data->taulukko[$viikonpv][$i])): ?>
+                    <td class="free"><a href="varaus.html">varaa</a></td>
+                <?php else: ?>
+                    <td class="unavailable"></td>
+                <?php endif; ?>
+    <?php endforeach; ?>
+
+        </tr>
+
+<?php endfor; ?>
 </table>

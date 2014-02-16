@@ -1,10 +1,21 @@
 <div id="page_title">
     <h1>Omat työvuorot</h1>
+    <h2> Viikko <?php echo $data->viikko ?> </h2>
     <p class="italic">Essi Esimerkki</p>
 </div>
 
+<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)-1) ?>'>Edellinen viikko</a>
+<a href='tyovuorot.php'>Nykyinen viikko</a>
+<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)+1) ?>'>Seuraava viikko</a>
+
+
 <table class="calendar">
-    <tr><td>klo</td><td>MA</td><td>TI</td><td>KE</td><td>TO</td><td>PE</td><td>LA</td><td>SU</td></tr>
+    <tr>
+        <td>klo</td>
+        <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
+            <td><?php echo $viikonpv, " ", $data->viikonpaivat[$viikonpv] ?></td>
+        <?php endforeach; ?>
+    </tr>
 
     <?php for ($i = 0; $i < 24; $i++): ?>
 
