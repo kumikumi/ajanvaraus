@@ -12,13 +12,14 @@ $tyovuorot = Tyovuoro::haeHenkilonTyovuorot($_SESSION['kayttaja']->getId());
 $taulukko = array("MA"=>array(), "TI"=>array(), "KE"=>array(), "TO"=>array(), "PE"=>array(), "LA"=> array(), "SU" => array());
 
 foreach ($tyovuorot as $tyovuoro) {
-    
+    $taulukko[$tyovuoro->getViikonpv()][$tyovuoro->getAikaviipale()] = "1";
 }
 
 echo date("N"), "<br>";
 echo date("W");
 naytaNakyma("tyovuoroview.php", array(
     "otsikko" => "Työvuorot",
-    "tyovuorot" => $tyovuorot
+    "tyovuorot" => $tyovuorot,
+    "taulukko" => $taulukko
 ));
 ?>

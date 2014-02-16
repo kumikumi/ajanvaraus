@@ -38,5 +38,5 @@ insert into tyovuoro
 select id, 'MA'::viikonpv as paiva, 1 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
 select id, 'MA'::viikonpv as paiva, 2 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
 select id, 'MA'::viikonpv as paiva, 3 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
-select id, 'MA'::viikonpv as paiva, 4 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
-select id, 'MA'::viikonpv as paiva, 5 as aikaviipale from kayttajat where kayttajatunnus like 'essi';
+select id, 'TI'::viikonpv as paiva, 4 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
+select id, 'TI'::viikonpv as paiva, 5 as aikaviipale from kayttajat where kayttajatunnus like 'essi';

@@ -1,37 +1,27 @@
 <div id="page_title">
-<h1>Omat työvuorot</h1>
-<p class="italic">Essi Esimerkki</p>
+    <h1>Omat työvuorot</h1>
+    <p class="italic">Essi Esimerkki</p>
 </div>
 
-<?php foreach ($data->tyovuorot as $tyovuoro): ?>
-
-    <?php echo $tyovuoro->getTyontekija_id(), ' | ', $tyovuoro->getViikonpv(), ' | ', $tyovuoro->getAikaviipale(); ?>
-<?php endforeach; ?>
-
 <table class="calendar">
-<tr><td>klo</td><td>MA</td><td>TI</td><td>KE</td><td>TO</td><td>PE</td><td>LA</td><td>SU</td></tr>
-<tr><td>8.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>9.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>10.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="unconfirmed"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>11.00-</td><td class="unconfirmed"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="unconfirmed"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>12.00-</td><td class="unconfirmed"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="confirmed"><a href="">varaus</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>13.00-</td><td class="confirmed"><a href="">varaus</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td class="unconfirmed"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>14.00-</td><td class="confirmed"><a href="">varaus</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>15.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>16.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>17.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>18.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>19.00-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>klo</td><td>MA</td><td>TI</td><td>KE</td><td>TO</td><td>PE</td><td>LA</td><td>SU</td></tr>
+
+    <?php for ($i = 0; $i < 24; $i++): ?>
+
+        <tr>
+            <td>
+                <?php if ($i % 2 == 0): echo ($i / 2) + 8, ":00-"; endif;?>
+            </td>
+
+    <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
+                <?php if (isset($data->taulukko[$viikonpv][$i])): ?>
+                    <td class="unconfirmed"></td>
+                <?php else: ?>
+                    <td class="unavailable"></td>
+                <?php endif; ?>
+    <?php endforeach; ?>
+
+        </tr>
+
+<?php endfor; ?>
 </table>
