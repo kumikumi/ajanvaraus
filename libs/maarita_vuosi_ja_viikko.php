@@ -15,10 +15,10 @@ if (isset($_GET['vuosi'])) {
 }
 
 if (isset($_GET['viikko'])) {
-    $viikko_options = array("options" => array("min_range" => 1, "max_range" => 52));
+    $viikko_options = array("options" => array("min_range" => 0, "max_range" => 53));
     $valid_viikko = filter_var($_GET['viikko'], FILTER_VALIDATE_INT, $viikko_options);
 
-    if ($valid_viikko) {
+    if ($valid_viikko || $valid_viikko == 0) {
         $viikko = $valid_viikko;
     } else {
         header('Location: index.php');
@@ -26,5 +26,13 @@ if (isset($_GET['viikko'])) {
     }
 } else {
     $viikko = intval(date("W"));
+}
+
+if ($viikko == 0) {
+    $viikko = viikkojaVuodessa($vuosi-1);
+    $vuosi--;
+} else if ($viikko > viikkojaVuodessa($vuosi)) {
+    $viikko = 1;
+    $vuosi++;
 }
 ?>

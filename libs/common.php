@@ -59,3 +59,9 @@ function varauksenViikonPv($varaus) {
     require_once 'libs/models/varaus.php';
     return viikonPaivaTekstina(date('N', strtotime($varaus->getPvm())));
 }
+
+function viikkojaVuodessa($vuosi) {
+    $date = new DateTime;
+    $date->setISODate($vuosi, 53);
+    return ($date->format("W") === "53" ? 53 : 52);
+}
