@@ -1,5 +1,5 @@
 drop table varaus;
-drop table tyoajat;
+drop table tyovuoro;
 drop type viikonpv;
 drop table hlokpalvelut;
 drop table palvelu;

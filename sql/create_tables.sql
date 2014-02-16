@@ -34,7 +34,7 @@ CREATE TABLE hlokpalvelut(
 
 CREATE TYPE viikonpv as ENUM ('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU');
 
-CREATE TABLE tyoajat(
+CREATE TABLE tyovuoro(
 	hlo_id integer references henkilokunta,
 	paiva viikonpv,
 	aikaviipale integer,

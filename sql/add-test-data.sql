@@ -32,3 +32,11 @@ select id from kayttajat where kayttajatunnus like 'jorma';
 insert into asiakas
 (asiakas_id)
 select id from kayttajat where kayttajatunnus like 'matti';
+
+insert into tyovuoro
+(hlo_id, paiva, aikaviipale)
+select id, 'MA'::viikonpv as paiva, 1 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
+select id, 'MA'::viikonpv as paiva, 2 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
+select id, 'MA'::viikonpv as paiva, 3 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
+select id, 'MA'::viikonpv as paiva, 4 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
+select id, 'MA'::viikonpv as paiva, 5 as aikaviipale from kayttajat where kayttajatunnus like 'essi';

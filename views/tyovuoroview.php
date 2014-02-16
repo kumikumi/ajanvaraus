@@ -3,6 +3,11 @@
 <p class="italic">Essi Esimerkki</p>
 </div>
 
+<?php foreach ($data->tyovuorot as $tyovuoro): ?>
+
+    <?php echo $tyovuoro->getTyontekija_id(), ' | ', $tyovuoro->getViikonpv(), ' | ', $tyovuoro->getAikaviipale(); ?>
+<?php endforeach; ?>
+
 <table class="calendar">
 <tr><td>klo</td><td>MA</td><td>TI</td><td>KE</td><td>TO</td><td>PE</td><td>LA</td><td>SU</td></tr>
 <tr><td>8.00-</td><td class="unavailable"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
