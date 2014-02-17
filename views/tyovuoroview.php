@@ -1,12 +1,12 @@
 <div id="page_title">
     <h1>Omat työvuorot</h1>
-    <h2> Viikko <?php echo $data->viikko ?> </h2>
+    <p>Viikko <?php echo $data->viikko ?> (<?php echo $data->vuosi ?>)</p>
     <p class="italic">Essi Esimerkki</p>
 </div>
 
-<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)-1) ?>'>Edellinen viikko</a>
+<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)-1) ?>&vuosi=<?php echo ($data->vuosi) ?>'><-- Edellinen viikko</a>
 <a href='tyovuorot.php'>Nykyinen viikko</a>
-<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)+1) ?>'>Seuraava viikko</a>
+<a href='tyovuorot.php?viikko=<?php echo (($data->viikko)+1) ?>&vuosi=<?php echo ($data->vuosi) ?>'>Seuraava viikko --></a>
 
 
 <table class="calendar">

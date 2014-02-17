@@ -3,8 +3,17 @@
 require_once 'libs/common.php';
 require_once 'libs/models/tyovuoro.php';
 require_once 'libs/models/varaus.php';
+require_once 'libs/models/palvelu.php';
+
+$page = "index.php";
 
 require 'libs/maarita_vuosi_ja_viikko.php';
+
+if (isset($_GET['palvelu']) && filter_var($_GET['palvelu'], FILTER_VALIDATE_INT)) {
+    $kysyttyPalvelu = Palvelu::etsi(filter_var($_GET['palvelu'], FILTER_VALIDATE_INT));
+} else {
+    $kysyttyPalvelu = null;
+}
 
 $taulukko = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
 $tyovuorot = Tyovuoro::haeTyovuorot($vuosi, $viikko);
@@ -25,25 +34,26 @@ foreach ($varaukset as $varaus) {
 }
 
 
-$viikonpaivat = array();
+$paivamaarat = array();
 
 $timestamp = timeStamp(intval($vuosi), intval($viikko));
 
-$viikonpaivat['MA'] = date("j.n", $timestamp);
-$viikonpaivat['TI'] = date("j.n", strtotime('+1 day', $timestamp));
-$viikonpaivat['KE'] = date("j.n", strtotime('+2 day', $timestamp));
-$viikonpaivat['TO'] = date("j.n", strtotime('+3 day', $timestamp));
-$viikonpaivat['PE'] = date("j.n", strtotime('+4 day', $timestamp));
-$viikonpaivat['LA'] = date("j.n", strtotime('+5 day', $timestamp));
-$viikonpaivat['SU'] = date("j.n", strtotime('+6 day', $timestamp));
-
+$paivamaarat['MA'] = $timestamp;
+$paivamaarat['TI'] = strtotime('+1 day', $timestamp);
+$paivamaarat['KE'] = strtotime('+2 day', $timestamp);
+$paivamaarat['TO'] = strtotime('+3 day', $timestamp);
+$paivamaarat['PE'] = strtotime('+4 day', $timestamp);
+$paivamaarat['LA'] = strtotime('+5 day', $timestamp);
+$paivamaarat['SU'] = strtotime('+6 day', $timestamp);
 
 naytaNakyma("etusivuview.php", array(
     "otsikko" => "Etusivu",
     "taulukko" => $taulukko,
-    "viikonpaivat" => $viikonpaivat,
     "viikko" => $viikko,
     "vuosi" => $vuosi,
-    "varaukset" => $varaukset
+    "varaukset" => $varaukset,
+    "paivamaarat" => $paivamaarat,
+    "palvelut" => Palvelu::getPalvelut(),
+    "kysyttyPalvelu" => $kysyttyPalvelu
 ));
 ?>

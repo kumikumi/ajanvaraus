@@ -7,23 +7,8 @@ if (!isset($_SESSION['kayttaja']) || !($_SESSION['kayttaja']->kuuluuHenkilokunta
     header('Location: index.php');
     exit();
 }
-
-if (isset($_GET['viikko'])) {
-    $viikko_options = array("options" => array("min_range" => 1, "max_range" => 52));
-    $valid_viikko = filter_var($_GET['viikko'], FILTER_VALIDATE_INT, $viikko_options);
-
-    if ($valid_viikko) {
-        $viikko = $valid_viikko;
-    } else {
-        header('Location: tyovuorot.php');
-        exit();
-    }
-} else {
-    $viikko = intval(date("W"));
-}
-
-$paiva = intval(date("N"));
-$timestamp = time()+604800*(($viikko)-intval(date("W")));
+$page = "tyovuorot.php";
+require 'libs/maarita_vuosi_ja_viikko.php';
 
 $tyovuorot = Tyovuoro::haeHenkilonTyovuorot($_SESSION['kayttaja']->getId());
 $taulukko = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
@@ -32,22 +17,22 @@ foreach ($tyovuorot as $tyovuoro) {
     $taulukko[$tyovuoro->getViikonpv()][$tyovuoro->getAikaviipale()] = "1";
 }
 
-
-
 $viikonpaivat = array();
 
-$viikonpaivat['MA'] = date("j.n", $timestamp+(1-$paiva)*86400);
-$viikonpaivat['TI'] = date("j.n", $timestamp+(2-$paiva)*86400);
-$viikonpaivat['KE'] = date("j.n", $timestamp+(3-$paiva)*86400);
-$viikonpaivat['TO'] = date("j.n", $timestamp+(4-$paiva)*86400);
-$viikonpaivat['PE'] = date("j.n", $timestamp+(5-$paiva)*86400);
-$viikonpaivat['LA'] = date("j.n", $timestamp+(6-$paiva)*86400);
-$viikonpaivat['SU'] = date("j.n", $timestamp+(7-$paiva)*86400);
+$timestamp = timeStamp(intval($vuosi), intval($viikko));
 
+$viikonpaivat['MA'] = date("j.n", $timestamp);
+$viikonpaivat['TI'] = date("j.n", strtotime('+1 day', $timestamp));
+$viikonpaivat['KE'] = date("j.n", strtotime('+2 day', $timestamp));
+$viikonpaivat['TO'] = date("j.n", strtotime('+3 day', $timestamp));
+$viikonpaivat['PE'] = date("j.n", strtotime('+4 day', $timestamp));
+$viikonpaivat['LA'] = date("j.n", strtotime('+5 day', $timestamp));
+$viikonpaivat['SU'] = date("j.n", strtotime('+6 day', $timestamp));
 naytaNakyma("tyovuoroview.php", array(
     "otsikko" => "Työvuorot",
     "taulukko" => $taulukko,
     "viikko" => $viikko,
+    "vuosi" => $vuosi,
     "viikonpaivat" => $viikonpaivat
 ));
 ?>

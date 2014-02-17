@@ -7,7 +7,7 @@ if (isset($_GET['vuosi'])) {
     if ($valid_vuosi) {
         $vuosi = $valid_vuosi;
     } else {
-        header('Location: index.php');
+        header('Location: ' . $page);
         exit();
     }
 } else {
@@ -21,7 +21,7 @@ if (isset($_GET['viikko'])) {
     if ($valid_viikko || $valid_viikko == 0) {
         $viikko = $valid_viikko;
     } else {
-        header('Location: index.php');
+        header('Location: ' . $page);
         exit();
     }
 } else {
