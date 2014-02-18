@@ -117,6 +117,10 @@ td.taken {
 background-color: red;
 }
 
+td.my_own {
+background-color: cyan;
+}
+
 td.confirmed {
 background-color: orange;
 }

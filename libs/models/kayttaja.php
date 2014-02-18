@@ -94,6 +94,21 @@ class Kayttaja {
         return $tulokset;
     }
 
+    public static function getTyontekijat() {
+        $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat, henkilokunta where id = hlo_id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $kayttaja = new Kayttaja($tulos->id, $tulos->kayttajatunnus, $tulos->salasana, $tulos->kokonimi);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään.
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $tulokset[] = $kayttaja;
+        }
+        return $tulokset;
+    }
+
     private static function kuuluukoHenkilokuntaan($kayttajaid) {
         $sql = "SELECT hlo_id from henkilokunta where hlo_id = ?";
         $kysely = getTietokantayhteys()->prepare($sql);

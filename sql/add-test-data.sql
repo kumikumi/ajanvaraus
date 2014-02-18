@@ -41,6 +41,24 @@ insert into asiakas
 (asiakas_id)
 select id from kayttajat where kayttajatunnus like 'matti';
 
+insert into hlokpalvelut
+(hlo_id, palvelu_id)
+select * from
+(select id as hlo_id from kayttajat where kayttajatunnus like 'essi') t1,
+(select palvelu_id from palvelu where nimi like 'Miesten hiustenleikkaus') t2;
+
+insert into hlokpalvelut
+(hlo_id, palvelu_id)
+select * from
+(select id as hlo_id from kayttajat where kayttajatunnus like 'tiina') t1,
+(select palvelu_id from palvelu where nimi like 'Miesten hiustenleikkaus') t2;
+
+insert into hlokpalvelut
+(hlo_id, palvelu_id)
+select * from
+(select id as hlo_id from kayttajat where kayttajatunnus like 'tiina') t1,
+(select palvelu_id from palvelu where nimi like 'Kaljunkiillotus') t2;
+
 insert into tyovuoro
 (hlo_id, paiva, aikaviipale)
 select id, 'MA'::viikonpv as paiva, 1 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
@@ -50,6 +68,13 @@ select id, 'TI'::viikonpv as paiva, 4 as aikaviipale from kayttajat where kaytta
 select id, 'TI'::viikonpv as paiva, 5 as aikaviipale from kayttajat where kayttajatunnus like 'essi' UNION
 select id, 'TI'::viikonpv as paiva, 7 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
 select id, 'TI'::viikonpv as paiva, 8 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 9 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 10 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 11 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 12 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 13 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 14 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
+select id, 'TI'::viikonpv as paiva, 15 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
 select id, 'KE'::viikonpv as paiva, 4 as aikaviipale from kayttajat where kayttajatunnus like 'tiina' UNION
 select id, 'KE'::viikonpv as paiva, 5 as aikaviipale from kayttajat where kayttajatunnus like 'tiina';
 

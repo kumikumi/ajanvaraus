@@ -10,11 +10,11 @@
         <p>
             Oletko kanta-asiakas? Kirjoittaudu sisään järjestelmään
         </p>
-        <form action="login" method="POST">
-            Käyttäjänimi: <input type="text" name="username" />
-            Salasana: <input type="password" name="password" />
-            <button type="submit">Kirjaudu</button>
-        </form>
+        <!--        <form action="login" method="POST">
+                    Käyttäjänimi: <input type="text" name="username" />
+                    Salasana: <input type="password" name="password" />
+                    <button type="submit">Kirjaudu</button>
+                </form>-->
     </div>
 
 </div>
@@ -22,17 +22,17 @@
 <h1> Kalenteri </h1>
 <p>Viikko <?php echo $data->viikko ?> (<?php echo $data->vuosi ?>)</p>
 
-<ul>
-    <?php foreach ($data->varaukset as $varaus): ?>
-        <li>Varaus: <?php echo viikonPaivaTekstina(date('N', strtotime($varaus->getPvm()))) ?></li>
-    <?php endforeach; ?>
-</ul>
-
 <?php require 'views/kysypalvelu.php' ?>
 
-<a href='index.php?viikko=<?php echo (($data->viikko) - 1) ?>&vuosi=<?php echo ($data->vuosi) ?><?php if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId(); endif;?>'><-- Edellinen viikko</a>
+<a href='index.php?viikko=<?php echo (($data->viikko) - 1) ?>&vuosi=<?php echo ($data->vuosi) ?><?php
+if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
+endif;
+?>'><-- Edellinen viikko</a>
 <a href='index.php'>Nykyinen viikko</a>
-<a href='index.php?viikko=<?php echo (($data->viikko) + 1) ?>&vuosi=<?php echo ($data->vuosi) ?><?php if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId(); endif;?>'>Seuraava viikko --></a>
+<a href='index.php?viikko=<?php echo (($data->viikko) + 1) ?>&vuosi=<?php echo ($data->vuosi) ?><?php
+if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
+endif;
+?>'>Seuraava viikko --></a>
 
 <table class="calendar">
     <tr>
@@ -46,19 +46,39 @@
 
         <tr>
             <td>
-                <?php if ($i % 2 == 0): echo ($i / 2) + 8, ":00-";
-                endif; ?>
+                <?php
+                if ($i % 2 == 0): echo ($i / 2) + 8, ":00-";
+                endif;
+                ?>
             </td>
 
             <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
                 <?php if (isset($data->taulukko[$viikonpv][$i])): ?>
-                    <td class="free"><a href="ajanvaraus.php?date=<?php echo date('Y-m-d', $data->paivamaarat[$viikonpv]); ?>&time=<?php echo $i; ?>">varaa</a></td>
+                    <?php if ($data->taulukko[$viikonpv][$i] == "available"): ?>
+                        <td class="free"><a href="ajanvaraus.php?date=<?php echo date('Y-m-d', $data->paivamaarat[$viikonpv]); ?>&time=<?php echo $i; ?><?php
+                            if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
+                            endif;
+                            ?>">varaa</a></td>
+                        <?php elseif ($data->taulukko[$viikonpv][$i] == "taken"): ?>
+                        <td class="taken">(varattu)</td>
+                    <?php elseif ($data->taulukko[$viikonpv][$i] == "not_enough_time"): ?>
+                        <td class="unconfirmed">(ei ehdi)</td>
+                    <?php elseif ($data->taulukko[$viikonpv][$i] == "my_own_extended"): ?>
+                        <td class="my_own"></td>    
+                    <?php elseif ($data->taulukko[$viikonpv][$i] == "my_own"): ?>
+                        <td class="my_own"><a href="ajanvaraus.php?date=<?php echo date('Y-m-d', $data->paivamaarat[$viikonpv]); ?>&time=<?php echo $i; ?><?php
+                            if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
+                            endif;
+                            ?>">varaus</a></td>
+                    <?php else: ?>
+                        <td class="taken">VIRHE</td>
+                    <?php endif; ?>
                 <?php else: ?>
                     <td class="unavailable"></td>
                 <?php endif; ?>
-    <?php endforeach; ?>
+            <?php endforeach; ?>
 
         </tr>
 
-<?php endfor; ?>
+    <?php endfor; ?>
 </table>

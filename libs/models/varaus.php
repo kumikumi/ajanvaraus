@@ -37,6 +37,19 @@ class Varaus {
         return $this->palvelu;
     }
 
+    public function getKesto() {
+        $sql = "select kesto from palvelu where palvelu_id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($this->palvelu));
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return $tulos->kesto;
+        }
+    }
+
     public function setPalvelu($palvelu) {
         $this->palvelu = $palvelu;
     }
@@ -66,15 +79,15 @@ class Varaus {
     }
 
     public static function haeVarauksetViikolle($vuosi, $viikkonro) {
-        
+
         $alku = date('Y-m-d', timeStamp($vuosi, $viikkonro));
         $loppu = date('Y-m-d', timeStamp($vuosi, nextWeekNumber($viikkonro)));
-        
+
 //        echo $alku;
 //        echo $loppu;
-        
+
         $sql = "SELECT pvm, aikaviipale, palvelu, toimihlo, asiakas from varaus where pvm >= ? and pvm < ?";
-        
+
         $kysely = getTietokantayhteys()->prepare($sql);
         $kysely->execute(array($alku, $loppu));
 
@@ -86,6 +99,12 @@ class Varaus {
             $tulokset[] = $varaus;
         }
         return $tulokset;
+    }
+
+    public static function uusiVaraus($pvm, $aikaviipale, $palvelu, $toimihlo, $asiakas) {
+        $sql = "insert into varaus (pvm, aikaviipale, palvelu, toimihlo, asiakas) VALUES (?, ?, ?, ?, ?)";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($pvm, $aikaviipale, $palvelu, $toimihlo, $asiakas));
     }
 
 }

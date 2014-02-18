@@ -1,9 +1,9 @@
-drop table varaus;
-drop table tyovuoro;
-drop type viikonpv;
-drop table hlokpalvelut;
-drop table palvelu;
-drop table asiakas;
-drop table johto;
-drop table henkilokunta;
-drop table kayttajat;
+drop table varaus cascade;
+drop table tyovuoro cascade;
+drop type viikonpv cascade;
+drop table hlokpalvelut cascade;
+drop table palvelu cascade;
+drop table asiakas cascade;
+drop table johto cascade;
+drop table henkilokunta cascade;
+drop table kayttajat cascade;

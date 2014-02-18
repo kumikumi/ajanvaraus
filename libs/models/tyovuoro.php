@@ -11,7 +11,7 @@ class Tyovuoro {
         $this->viikonpv = $viikonpv;
         $this->aikaviipale = $aikaviipale;
     }
-    
+
     public function getTyontekija_id() {
         return $this->tyontekija_id;
     }
@@ -23,7 +23,6 @@ class Tyovuoro {
     public function getAikaviipale() {
         return $this->aikaviipale;
     }
-
 
     public static function haeHenkilonTyovuorot($tyontekija_id) {
         $sql = "SELECT hlo_id, paiva, aikaviipale from tyovuoro where hlo_id = ?";
@@ -38,9 +37,8 @@ class Tyovuoro {
             $tulokset[] = $tyovuoro;
         }
         return $tulokset;
-    
     }
-    
+
     public static function haeTyovuorot() {
         $sql = "SELECT hlo_id, paiva, aikaviipale from tyovuoro";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -54,8 +52,21 @@ class Tyovuoro {
             $tulokset[] = $tyovuoro;
         }
         return $tulokset;
-    
     }
 
+    public static function haeTyovuorotPalvelunMukaan($palvelu_id) {
+        $sql = "SELECT tyovuoro.hlo_id, paiva, aikaviipale from tyovuoro, hlokpalvelut where tyovuoro.hlo_id = hlokpalvelut.hlo_id and palvelu_id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($palvelu_id));
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tyovuoro = new Tyovuoro($tulos->hlo_id, $tulos->paiva, $tulos->aikaviipale);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään.
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $tulokset[] = $tyovuoro;
+        }
+        return $tulokset;
+    }
 
 }
