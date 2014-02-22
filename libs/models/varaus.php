@@ -111,7 +111,7 @@ class Varaus {
     }
 
     public static function haeTyontekijanVarauksetViikolle($vuosi, $viikkonro, $tyontekija_id) {
-        
+
         $alku = date('Y-m-d', timeStamp($vuosi, $viikkonro));
         $loppu = date('Y-m-d', timeStamp($vuosi, nextWeekNumber($viikkonro, $vuosi)));
 
@@ -134,6 +134,20 @@ class Varaus {
         $sql = "select pvm, aikaviipale, toimihlo, palvelu, asiakas, asiakasnimi, varausnumero from varaus where pvm = ? and aikaviipale = ? and asiakas = ? LIMIT 1";
         $kysely = getTietokantayhteys()->prepare($sql);
         $kysely->execute(array($pvm, $aika, $asiakas_id));
+
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return new Varaus($tulos->pvm, $tulos->aikaviipale, $tulos->palvelu, $tulos->toimihlo, $tulos->asiakas, $tulos->asiakasnimi, $tulos->varausnumero);
+        }
+    }
+
+    public static function etsiTyontekijanVaraus($pvm, $aika, $hlo_id) {
+        $sql = "select pvm, aikaviipale, toimihlo, palvelu, asiakas, asiakasnimi, varausnumero from varaus where pvm = ? and aikaviipale = ? and toimihlo = ? LIMIT 1";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($pvm, $aika, $hlo_id));
 
 
         $tulos = $kysely->fetchObject();

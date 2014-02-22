@@ -186,6 +186,28 @@ class Kayttaja {
         }
     }
 
+    public static function etsiKayttaja($kayttajaid) {
+        $sql = "SELECT id,kayttajatunnus, salasana, kokonimi from kayttajat where id = ? LIMIT 1";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($kayttajaid));
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            $kayttaja = new Kayttaja($tulos->id, $tulos->kayttajatunnus, $tulos->salasana, $tulos->kokonimi);
+            $kayttaja->henkilokunta = Kayttaja::kuuluukoHenkilokuntaan($kayttaja->id);
+            $kayttaja->asiakas = Kayttaja::kuuluukoAsiakaskuntaan($kayttaja->id);
+            $kayttaja->johto = Kayttaja::kuuluukoJohtoryhmaan($kayttaja->id);
+
+            if ($kayttaja->asiakas) {
+                $kayttaja->saldo = Kayttaja::haeAsiakasSaldo($kayttaja->id);
+            }
+
+            return $kayttaja;
+        }
+    }
+
     public static function haeTyontekijatPalvelunMukaan($palvelu_id) {
         $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat, hlokpalvelut where kayttajat.id = hlokpalvelut.hlo_id and palvelu_id = ?";
         $kysely = getTietokantayhteys()->prepare($sql);
