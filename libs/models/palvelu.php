@@ -81,6 +81,20 @@ class Palvelu {
         }
     }
 
+    public static function ensimmainen() {
+        $sql = "SELECT palvelu_id, nimi, kesto, kuvaus, hinta from palvelu order by palvelu_id LIMIT 1";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return new Palvelu($tulos->palvelu_id, $tulos->nimi, $tulos->kesto, $tulos->kuvaus, $tulos->hinta);
+        }
+    }
+
     public static function muokkaaPalvelua($id, $nimi, $kesto, $kuvaus, $hinta) {
         $sql = "UPDATE palvelu SET nimi=?, kesto=?, kuvaus=?, hinta=? where palvelu_id=?";
         $kysely = getTietokantayhteys()->prepare($sql);

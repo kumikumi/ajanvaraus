@@ -45,7 +45,7 @@
                 <?php endif; ?>
 
                 <?php if ($kayttaja->onJohtaja()): ?>
-                    <a class="henkilosto" href="./henkilosto.html">Henkilöstön hallinta</a>
+                    <a class="henkilosto" href="./henkilosto.php">Henkilöstön hallinta</a>
                     <a class="raportit" href="./raportit.html">Raportit</a>
                 <?php endif; ?>
                 |
@@ -54,7 +54,7 @@
                 <a class="uloskirjaus" href="logout.php">Uloskirjaus</a>
             <?php else: ?>
                 <a href="login.php">Kirjaudu sisään</a>
-                <a class="rek" href="./reksivu.html">Rekisteröityminen</a>
+                <a class="rek" href="./rekisteroityminen.php">Rekisteröityminen</a>
             <?php endif; ?>
 
         </div>
@@ -76,8 +76,13 @@
             </div>
         <?php endif; ?>
 
-        <?php if (isset($data->ilmoitus)): ?>
-            <p><?php echo $data->ilmoitus; ?></p>
+        <?php if (isset($_SESSION['notice']) || isset($data->ilmoitus)): ?>
+        
+        <div id ="ilmoitus">
+            <?php if (isset($data->ilmoitus)): ?><p><?php echo $data->ilmoitus; ?></p><?php endif; ?>
+            <?php if (isset($_SESSION['notice'])): ?><p><?php echo $_SESSION['notice']; ?></p><?php endif; ?>
+        </div>
+        <?php $_SESSION['notice'] = null; ?>
         <?php endif; ?>
 
         <?php require $sivu; ?>

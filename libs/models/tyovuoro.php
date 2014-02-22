@@ -68,5 +68,37 @@ class Tyovuoro {
         }
         return $tulokset;
     }
+    
+        public static function haeTyovuorotPalvelunJaHenkilonMukaan($palvelu_id, $hlo_id) {
+        $sql = "SELECT tyovuoro.hlo_id, paiva, aikaviipale from tyovuoro, hlokpalvelut where tyovuoro.hlo_id = hlokpalvelut.hlo_id and palvelu_id = ? and hlokpalvelut.hlo_id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($palvelu_id, $hlo_id));
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tyovuoro = new Tyovuoro($tulos->hlo_id, $tulos->paiva, $tulos->aikaviipale);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään.
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $tulokset[] = $tyovuoro;
+        }
+        return $tulokset;
+    }
+
+    public static function asetaHenkilonTyovuorot($tyovuorot, $tyontekija_id) {
+        Tyovuoro::poistaKaikkiHenkilonTyovuorot($tyontekija_id);
+
+        foreach ($tyovuorot as $tyovuoro) {
+            $sql = "insert into tyovuoro (hlo_id, paiva, aikaviipale) values (?, ?, ?)";
+            $kysely = getTietokantayhteys()->prepare($sql);
+            $kysely->execute(array($tyovuoro->getTyontekija_id(), $tyovuoro->getViikonpv(), $tyovuoro->getAikaviipale()));
+            
+        }
+    }
+
+    public static function poistaKaikkiHenkilonTyovuorot($tyontekija_id) {
+        $sql = "DELETE from tyovuoro where hlo_id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($tyontekija_id));
+    }
 
 }

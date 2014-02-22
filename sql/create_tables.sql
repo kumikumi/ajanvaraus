@@ -47,5 +47,7 @@ CREATE TABLE varaus(
 	toimihlo integer references henkilokunta on delete cascade on update cascade,
 	palvelu integer references palvelu on delete cascade on update cascade,
 	asiakas integer references asiakas on delete cascade on update cascade,
+        asiakasnimi varchar(30),
+        varausnumero integer,
 	primary key (pvm, aikaviipale, toimihlo)
 );

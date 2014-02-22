@@ -113,6 +113,10 @@ td.free {
 background-color: lightgreen;
 }
 
+td.black {
+background-color: #404040;
+}
+
 td.taken {
 background-color: red;
 }

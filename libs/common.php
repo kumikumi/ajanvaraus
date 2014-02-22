@@ -14,10 +14,10 @@ function naytaNakyma($sivu, $data = array()) {
     die();
 }
 
-function nextWeekNumber($weekNumber) {
+function nextWeekNumber($weekNumber, $year) {
     $weekNumber = intval($weekNumber);
 
-    if ($weekNumber == 52) {
+    if ($weekNumber == viikkojaVuodessa($year)) {
         return 1;
     } else {
         return $weekNumber + 1;
@@ -52,6 +52,14 @@ function viikonPaivaTekstina($viikonpv) {
             return 'LA';
         case 7:
             return 'SU';
+    }
+}
+
+function aikaviipaleTekstina($aikaviipale) {
+    if ($aikaviipale % 2 == 0){
+        return ($aikaviipale / 2) + 8 . ":00";
+    } else {
+        return (($aikaviipale - 1) / 2) + 8 . ":30";
     }
 }
 

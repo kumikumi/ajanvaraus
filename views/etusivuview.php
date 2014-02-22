@@ -1,5 +1,6 @@
 <div id="sidebar">
 
+    
     <div id="sidebar_box">
         <p>
             Rekisteröidy kanta-asiakkaaksi ja saat paremmat edut
@@ -16,6 +17,17 @@
                     <button type="submit">Kirjaudu</button>
                 </form>-->
     </div>
+    <?php if (!isset($_SESSION['kayttaja'])): ?>
+    <div id="sidebar_box">
+        <p>
+            Oletko varannut ajan? Syötä varausnumerosi tehdäksesi muutoksia.
+        </p>
+                <form action="ajanvaraus.php" method="GET">
+                    Varausnumero: <input type="text" name="varausnumero" />
+                    <button type="submit">Tarkastele varausta</button>
+                </form>
+    </div>
+    <?php endif; ?>
 
 </div>
 
@@ -63,6 +75,8 @@ endif;
                         <td class="taken">(varattu)</td>
                     <?php elseif ($data->taulukko[$viikonpv][$i] == "not_enough_time"): ?>
                         <td class="unconfirmed">(ei ehdi)</td>
+                    <?php elseif ($data->taulukko[$viikonpv][$i] == "black"): ?>
+                        <td class="black"></td>    
                     <?php elseif ($data->taulukko[$viikonpv][$i] == "my_own_extended"): ?>
                         <td class="my_own"></td>    
                     <?php elseif ($data->taulukko[$viikonpv][$i] == "my_own"): ?>
@@ -70,7 +84,7 @@ endif;
                             if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
                             endif;
                             ?>">varaus</a></td>
-                    <?php else: ?>
+                        <?php else: ?>
                         <td class="taken">VIRHE</td>
                     <?php endif; ?>
                 <?php else: ?>

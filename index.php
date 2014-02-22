@@ -16,12 +16,25 @@ if (isset($_GET['palvelu']) && filter_var($_GET['palvelu'], FILTER_VALIDATE_INT)
     $kysyttyPalvelu = null;
 }
 
-$kalenteri = muodostaKalenteri($kysyttyPalvelu, $vuosi, $viikko);
+$ilmoitus = null;
+
+if (isset($_GET['notice'])) {
+    if ($_GET['notice'] == "success") {
+        $ilmoitus = "Ajanvarauksesi on kirjattu järjestelmään.";
+    } else if ($_GET['notice'] == "varauspoistettu") {
+        $ilmoitus = "Ajanvaraus on poistettu.";
+    } else if ($_GET['notice'] == "paivitetty") {
+        $ilmoitus = "Ajanvaraustiedot on päivitetty.";
+    }
+}
+
+$kalenteri = muodostaKalenteri($kysyttyPalvelu, null, $vuosi, $viikko);
 $paivamaarat = viikonpaivienTimestampit($vuosi, $viikko);
 
 naytaNakyma("etusivuview.php", array(
     "otsikko" => "Etusivu",
     "taulukko" => $kalenteri,
+    "ilmoitus" => $ilmoitus,
     "viikko" => $viikko,
     "vuosi" => $vuosi,
     "paivamaarat" => $paivamaarat,

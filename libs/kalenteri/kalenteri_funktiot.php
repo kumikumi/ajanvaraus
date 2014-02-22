@@ -15,8 +15,26 @@ function viikonpaivienTimestampit($vuosi, $viikko) {
     return $palautus;
 }
 
-function muodostaKalenteri($kysyttyPalvelu, $vuosi, $viikko) {
-    $taulukko = muodostaTaulukko($kysyttyPalvelu, $vuosi, $viikko);
+function muodostaTyovuoroKalenteri($kysyttyHenkilo, $vuosi, $viikko) {
+    require_once 'libs/models/varaus.php';
+    $tyovuorot = Tyovuoro::haeHenkilonTyovuorot($kysyttyHenkilo);
+    $varaukset = Varaus::haeTyontekijanVarauksetViikolle($vuosi, $viikko, $kysyttyHenkilo);
+
+    $kalenteri = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
+
+    foreach ($tyovuorot as $tyovuoro) {
+        $kalenteri[$tyovuoro->getViikonpv()][$tyovuoro->getAikaviipale()] = 0;
+    }
+
+    foreach ($varaukset as $varaus) {
+        $kalenteri[varauksenViikonPv($varaus)][$varaus->getAikaviipale()] = $varaus;
+    }
+
+    return $kalenteri;
+}
+
+function muodostaKalenteri($kysyttyPalvelu, $kysyttyHenkilo, $vuosi, $viikko) {
+    $taulukko = muodostaTaulukko($kysyttyPalvelu, $kysyttyHenkilo, $vuosi, $viikko);
 
     $kalenteri = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
 
@@ -41,11 +59,13 @@ function muodostaKalenteri($kysyttyPalvelu, $vuosi, $viikko) {
             }
         }
     }
+    $kalenteri = poistaMenneetAjat($kalenteri, $vuosi, $viikko);
 
     return $kalenteri;
 }
 
-function muodostaTaulukko($kysyttyPalvelu, $vuosi, $viikko) {
+function muodostaTaulukko($kysyttyPalvelu, $kysyttyHenkiloId, $vuosi, $viikko) {
+    require_once 'libs/models/varaus.php';
     $taulukko = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
     if ($kysyttyPalvelu) {
         $tyovuorot = Tyovuoro::haeTyovuorotPalvelunMukaan($kysyttyPalvelu->getId());
@@ -127,6 +147,21 @@ function poistaLiianLyhyetAjat($taulukko, $kysyttyPalvelu) {
         }
     }
     return $taulukko;
+}
+
+function poistaMenneetAjat($kalenteri, $vuosi, $viikko) {
+    $timestampit = viikonpaivienTimestampit($vuosi, $viikko);
+    foreach ($kalenteri as $viikonpvnimi => $aikaviipaleet) {
+        for ($aikaviipale = 0; $aikaviipale < 24; $aikaviipale++) {
+//            echo "timestamp[". $viikonpvnimi ."]=".$timestampit[$viikonpvnimi]."<br>";
+//            echo "aikaviipale=".$aikaviipale."<br>";
+//            echo "aikaviipale*1800 =". $aikaviipale*1800 ."<br>";
+            if ($timestampit[$viikonpvnimi] + $aikaviipale * 1800 + 28800 < time()) {
+                $kalenteri[$viikonpvnimi][$aikaviipale] = "black";
+            }
+        }
+    }
+    return $kalenteri;
 }
 
 ?>
