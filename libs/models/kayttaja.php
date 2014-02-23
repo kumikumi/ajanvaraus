@@ -1,7 +1,5 @@
 <?php
 
-//require_once '../tietokantayhteys.php';
-
 class Kayttaja {
 
     private $id;
@@ -234,6 +232,19 @@ class Kayttaja {
         }
     }
 
+    public static function onkoTunnusVarattu($kayttajatunnus) {
+        $sql = "SELECT count(*) from kayttajat where kayttajatunnus like ? LIMIT 1";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($kayttajatunnus));
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return $tulos->count;
+        }
+    }
+
     public static function haeTyontekijatPalvelunMukaan($palvelu_id) {
         $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat, hlokpalvelut where kayttajat.id = hlokpalvelut.hlo_id and palvelu_id = ?";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -254,8 +265,8 @@ class Kayttaja {
         require_once 'libs/models/tyovuoro.php';
         require_once 'libs/models/palvelu.php';
         $time = strtotime($pvm);
-        $vuosi = date("o", $time);
-        $viikko = date("W", $time);
+        $vuosi = (int)date("o", $time);
+        $viikko = (int)date("W", $time);
         $viikonpv = date("N", $time);
 
         $palautus = array();
@@ -275,14 +286,44 @@ class Kayttaja {
         return $palautus;
     }
 
-    public static function uusiAsiakas($kayttajatunnus, $salasana, $kokonimi) {
-        $sql = "insert into kayttajat (kayttajatunnus, salasana, kokonimi) VALUES (?, ?, ?)";
-        $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array($kayttajatunnus, $salasana, $kokonimi));
+    public static function uusiAsiakas($valid_tunnus, $valid_salasana, $valid_salasana_uudelleen, $valid_nimi) {
+        $virheet = array();
 
-        $sql2 = "insert into asiakas (asiakas_id) select id from kayttajat where kayttajatunnus like ? and salasana like ? and kokonimi like ?";
-        $kysely2 = getTietokantayhteys()->prepare($sql2);
-        $kysely2->execute(array($kayttajatunnus, $salasana, $kokonimi));
+        if (empty($valid_nimi)) {
+            $virheet[] = "Nimi ei saa olla tyhjä";
+        }
+        
+//        if (empty($valid_email)) {
+//            $virheet[] = "Hei pliis anna nyt joku oikea sähköpostiosoite, ei me lähetetä spämmiä";
+//        }
+
+        if (!$valid_tunnus) {
+            $virheet[] = "Tarkistappa toi sun käyttäjätunnus";
+        } else {
+            if (Kayttaja::onkoTunnusVarattu($valid_tunnus)) {
+                $virheet[] = "Käyttäjätunnus on jo varattu";
+            }
+        }
+
+        if (!$valid_salasana) {
+            $virheet[] = "Salasana ei saa olla tyhjä";
+        }
+
+        if (!($valid_salasana == $valid_salasana_uudelleen)) {
+            $virheet[] = "Salasana ei täsmää tuohon toisella kerralla syöttämääsi salasanaan";
+        }
+
+        if (!empty($virheet)) {
+            return $virheet;
+        } else {
+            $sql = "insert into kayttajat (kayttajatunnus, salasana, kokonimi) VALUES (?, ?, ?)";
+            $kysely = getTietokantayhteys()->prepare($sql);
+            $kysely->execute(array($valid_tunnus, $valid_salasana, $valid_nimi));
+
+            $sql2 = "insert into asiakas (asiakas_id) select id from kayttajat where kayttajatunnus like ? and salasana like ? and kokonimi like ?";
+            $kysely2 = getTietokantayhteys()->prepare($sql2);
+            $kysely2->execute(array($valid_tunnus, $valid_salasana, $valid_nimi));
+        }
     }
 
     public static function muokkaaKayttajaa($id, $kokonimi, $asiakas, $tyontekija, $johtaja) {
@@ -366,6 +407,4 @@ class Kayttaja {
             return $tulos->count;
         }
     }
-
 }
-

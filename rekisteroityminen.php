@@ -15,30 +15,9 @@ if (!empty($_POST['submit'])) {
     $valid_salasana = filter_var($_POST["password"], FILTER_SANITIZE_STRING);
     $valid_salasana_uudelleen = filter_var($_POST["password2"], FILTER_SANITIZE_STRING);
 
-    $virheet = array();
-
-    if (empty($valid_nimi)) {
-        $virheet[] = "Nimi ei saa olla tyhjä";
-    }
-
-    if (empty($valid_email)) {
-        $virheet[] = "Hei pliis anna nyt joku oikea sähköpostiosoite, ei me lähetetä spämmiä";
-    }
-
-    if (!$valid_tunnus) {
-        $virheet[] = "Tarkistappa toi sun käyttäjätunnus";
-    }
-
-    if (!$valid_salasana) {
-        $virheet[] = "Salasana ei saa olla tyhjä";
-    }
-
-    if (!($valid_salasana == $valid_salasana_uudelleen)) {
-        $virheet[] = "Salasana ei täsmää tuohon toisella kerralla syöttämääsi salasanaan";
-    }
+    $virheet = Kayttaja::uusiAsiakas($valid_tunnus, $valid_salasana, $valid_salasana_uudelleen, $valid_nimi);
 
     if (!empty($virheet)) {
-
         naytaNakyma("views/rekview.php", array(
             "otsikko" => "Uusi käyttäjätunnus",
             "tunnus" => new Kayttaja(-1, $valid_tunnus, "", $valid_nimi),
@@ -46,9 +25,8 @@ if (!empty($_POST['submit'])) {
         ));
         exit;
     } else {
-        Kayttaja::uusiAsiakas($valid_tunnus, $valid_salasana, $valid_nimi);
-        $_SESSION['notice'] = "Käyttäjätunnus luotu onnistuneesti.";
-        header('Location: index.php');
+        $_SESSION['notice'] = "Käyttäjätunnus luotu onnistuneesti. Voit nyt kirjoittautua sisään järjestelmään.";
+        header('Location: login.php');
         exit();
     }
 }

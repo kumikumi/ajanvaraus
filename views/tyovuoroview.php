@@ -1,7 +1,7 @@
 <div id="page_title">
     <h1>Omat työvuorot</h1>
     <p>Viikko <?php echo $data->viikko ?> (<?php echo $data->vuosi ?>)</p>
-    <p class="italic">Essi Esimerkki</p>
+    <p class="italic"><?php echo $_SESSION['kayttaja']->getKokonimi(); ?></p>
 </div>
 
 <a href='tyovuorot.php?viikko=<?php echo (($data->viikko) - 1) ?>&vuosi=<?php echo ($data->vuosi) ?>'><-- Edellinen viikko</a>

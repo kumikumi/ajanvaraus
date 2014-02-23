@@ -91,10 +91,16 @@ class Varaus {
 
     public static function haeVarauksetViikolle($vuosi, $viikkonro) {
         require_once 'libs/common.php';
+        
+//        echo "vuosi:".$vuosi;
+//        echo "viikko:".$viikkonro;
 
         $alku = date('Y-m-d', timeStamp($vuosi, $viikkonro));
         $loppu = date('Y-m-d', timeStamp($vuosi, nextWeekNumber($viikkonro, $vuosi)));
 
+//        echo "alku:".$alku;
+//        echo "loppu:".$loppu;
+        
         $sql = "SELECT pvm, aikaviipale, palvelu, toimihlo, asiakas, asiakasnimi, varausnumero from varaus where pvm >= ? and pvm < ?";
 
         $kysely = getTietokantayhteys()->prepare($sql);
