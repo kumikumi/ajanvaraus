@@ -9,6 +9,7 @@ require_once 'libs/common.php';
 require_once 'libs/models/palvelu.php';
 
 if (!isset($_SESSION['kayttaja']) || !($_SESSION['kayttaja']->kuuluuHenkilokuntaan())) {
+    $_SESSION['virhe'] = "Et ole kirjautunut sisään tai sinulla ei ole tarvittavia oikeuksia.";
     header('Location: index.php');
     exit();
 }

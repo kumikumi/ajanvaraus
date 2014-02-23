@@ -63,21 +63,37 @@
 
         </div>
 
-        <?php if (isset($data->virhe)): ?>
+        <?php if (isset($_SESSION['virhe']) || isset($data->virhe)): ?>
             <div id ="virhe">
                 <p>Virhe:</p>
-                <?php if (is_array($data->virhe)): ?>
-                    <ul>
-                        <?php foreach ($data->virhe as $viesti): ?>
-                            <li><?php echo $viesti ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+                <?php if (isset($data->virhe)): ?>
+                    <?php if (is_array($data->virhe)): ?>
+                        <ul>
+                            <?php foreach ($data->virhe as $viesti): ?>
+                                <li><?php echo $viesti ?></li>
+                            <?php endforeach; ?>
+                        </ul>
 
-                <?php else: ?>
-                    <p><?php echo $data->virhe ?></p>
+                    <?php else: ?>
+                        <p><?php echo $data->virhe ?></p>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['virhe'])): ?>
+                    <?php if (is_array($_SESSION['virhe'])): ?>
+                        <ul>
+                            <?php foreach ($_SESSION['virhe'] as $viesti): ?>
+                                <li><?php echo $viesti ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+
+                    <?php else: ?>
+                        <p><?php echo $_SESSION['virhe'] ?></p>
+                    <?php endif; ?>
                 <?php endif; ?>
 
             </div>
+
+            <?php $_SESSION['virhe'] = null; ?>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['notice']) || isset($data->ilmoitus)): ?>

@@ -3,6 +3,7 @@
 require_once 'libs/common.php';
 
 if (!isset($_SESSION['kayttaja'])) {
+    $_SESSION['virhe'] = "Et ole kirjautunut sisään tai istuntosi on vanhentunut. Kirjaudu sisään ja yritä uudelleen.";
     header('Location: index.php');
     exit();
 }

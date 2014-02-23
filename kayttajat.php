@@ -5,6 +5,7 @@ require_once 'libs/models/tyovuoro.php';
 require_once 'libs/models/kayttaja.php';
 
 if (!isset($_SESSION['kayttaja']) || !($_SESSION['kayttaja']->onJohtaja() || $_SESSION['kayttaja']->kuuluuHenkilokuntaan())) {
+    $_SESSION['virhe'] = "Check your privilege!!1";
     header('Location: index.php');
     exit();
 }

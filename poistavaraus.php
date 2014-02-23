@@ -13,12 +13,13 @@ if (isset($_SESSION['kayttaja'])) {
         //echo "olet asiakas";
 
         if (empty($_POST["date"]) || empty($_POST["time"])) {
-            header('Location: exit.php');
+            header('Location: index.php');
             exit();
         }
 
         Varaus::poistaAsiakkaanVaraus($_POST["date"], $_POST["time"], $_SESSION['kayttaja']->getId());
-        header('Location: index.php?notice=varauspoistettu');
+        $_SESSION['notice'] = "Varaus on poistettu järjestelmästä.";
+        header('Location: index.php');
         exit();
     } else {
         header('Location: index.php');
