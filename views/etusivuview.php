@@ -67,10 +67,10 @@ endif;
             <?php foreach (array('MA', 'TI', 'KE', 'TO', 'PE', 'LA', 'SU') as $viikonpv): ?>
                 <?php if (isset($data->taulukko[$viikonpv][$i])): ?>
                     <?php if ($data->taulukko[$viikonpv][$i] == "available"): ?>
-                        <td class="free"><a href="ajanvaraus.php?date=<?php echo date('Y-m-d', $data->paivamaarat[$viikonpv]); ?>&time=<?php echo $i; ?><?php
+                        <td class="free"><?php if ($data->henkilokunta): ?>(vapaa)<?php else: ?><a href="ajanvaraus.php?date=<?php echo date('Y-m-d', $data->paivamaarat[$viikonpv]); ?>&time=<?php echo $i; ?><?php
                             if ($data->kysyttyPalvelu): echo "&palvelu=" . $data->kysyttyPalvelu->getId();
                             endif;
-                            ?>">varaa</a></td>
+                            ?>">varaa</a><?php endif; ?></td>
                         <?php elseif ($data->taulukko[$viikonpv][$i] == "taken"): ?>
                         <td class="taken">(varattu)</td>
                     <?php elseif ($data->taulukko[$viikonpv][$i] == "not_enough_time"): ?>

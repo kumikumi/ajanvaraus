@@ -10,7 +10,6 @@ if (!isset($_SESSION['kayttaja'])) {
 }
 
 if ($_SESSION['kayttaja']->kuuluuHenkilokuntaan()) {
-    $page = "tyovuorot.php";
     require 'libs/maarita_vuosi_ja_viikko.php';
     $kalenteri = muodostaTyovuoroKalenteri($_SESSION['kayttaja']->getId(), $vuosi, $viikko);
 

@@ -37,16 +37,20 @@
                 ?>
 
                 <?php if ($kayttaja->onAsiakas()): ?>
-                    <a class="ajanvaraukset" href="./ajanvaraukset.html">Varaukset</a>
+                    <a class="ajanvaraukset" href="./varaukset.php">Varaukset</a>
                 <?php endif; ?>
 
                 <?php if ($kayttaja->kuuluuHenkilokuntaan()): ?>
                     <a class="tyovuorot" href="./tyovuorot.php">Työvuorot</a>
                 <?php endif; ?>
 
+                <?php if ($kayttaja->kuuluuHenkilokuntaan() || $kayttaja->onJohtaja()): ?>
+                    <a href="./kayttajat.php">Käyttäjät</a>
+                <?php endif; ?>
+
                 <?php if ($kayttaja->onJohtaja()): ?>
                     <a class="henkilosto" href="./henkilosto.php">Henkilöstön hallinta</a>
-                    <a class="raportit" href="./raportit.html">Raportit</a>
+                    <a class="raportit" href="./yhteenveto.php">Yhteenveto</a>
                 <?php endif; ?>
                 |
 
@@ -63,26 +67,26 @@
             <div id ="virhe">
                 <p>Virhe:</p>
                 <?php if (is_array($data->virhe)): ?>
-                <ul>
-                    <?php foreach ($data->virhe as $viesti): ?>
-                        <li><?php echo $viesti ?></li>
-                    <?php endforeach; ?>
-                </ul>
-                
+                    <ul>
+                        <?php foreach ($data->virhe as $viesti): ?>
+                            <li><?php echo $viesti ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+
                 <?php else: ?>
-                <p><?php echo $data->virhe ?></p>
+                    <p><?php echo $data->virhe ?></p>
                 <?php endif; ?>
-                
+
             </div>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['notice']) || isset($data->ilmoitus)): ?>
-        
-        <div id ="ilmoitus">
-            <?php if (isset($data->ilmoitus)): ?><p><?php echo $data->ilmoitus; ?></p><?php endif; ?>
-            <?php if (isset($_SESSION['notice'])): ?><p><?php echo $_SESSION['notice']; ?></p><?php endif; ?>
-        </div>
-        <?php $_SESSION['notice'] = null; ?>
+
+            <div id ="ilmoitus">
+                <?php if (isset($data->ilmoitus)): ?><p><?php echo $data->ilmoitus; ?></p><?php endif; ?>
+                <?php if (isset($_SESSION['notice'])): ?><p><?php echo $_SESSION['notice']; ?></p><?php endif; ?>
+            </div>
+            <?php $_SESSION['notice'] = null; ?>
         <?php endif; ?>
 
         <?php require $sivu; ?>

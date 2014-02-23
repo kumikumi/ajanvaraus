@@ -79,6 +79,33 @@ class Kayttaja {
         }
     }
 
+    public static function kayttajatJarjestettyna($sort) {
+        if ($sort === "id") {
+            $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat order by id";
+        } else if ($sort === "tunnus") {
+            $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat order by tunnus";
+        } else if ($sort === "nimi") {
+            $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat order by kokonimi";
+        }
+
+        echo $sql;
+        $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $kayttaja = new Kayttaja($tulos->id, $tulos->kayttajatunnus, $tulos->salasana, $tulos->kokonimi);
+            $kayttaja->henkilokunta = Kayttaja::kuuluukoHenkilokuntaan($kayttaja->id);
+            $kayttaja->asiakas = Kayttaja::kuuluukoAsiakaskuntaan($kayttaja->id);
+            $kayttaja->johto = Kayttaja::kuuluukoJohtoryhmaan($kayttaja->id);
+            //$array[] = $muuttuja; lisää muuttujan arrayn perään.
+            //Se vastaa melko suoraan ArrayList:in add-metodia.
+            $tulokset[] = $kayttaja;
+        }
+        return $tulokset;
+    }
+
     public static function getKayttajat() {
         $sql = "SELECT id, kayttajatunnus, salasana, kokonimi from kayttajat";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -198,11 +225,10 @@ class Kayttaja {
             $kayttaja = new Kayttaja($tulos->id, $tulos->kayttajatunnus, $tulos->salasana, $tulos->kokonimi);
             $kayttaja->henkilokunta = Kayttaja::kuuluukoHenkilokuntaan($kayttaja->id);
             $kayttaja->asiakas = Kayttaja::kuuluukoAsiakaskuntaan($kayttaja->id);
-            $kayttaja->johto = Kayttaja::kuuluukoJohtoryhmaan($kayttaja->id);
-
             if ($kayttaja->asiakas) {
                 $kayttaja->saldo = Kayttaja::haeAsiakasSaldo($kayttaja->id);
             }
+            $kayttaja->johto = Kayttaja::kuuluukoJohtoryhmaan($kayttaja->id);
 
             return $kayttaja;
         }
@@ -257,6 +283,88 @@ class Kayttaja {
         $sql2 = "insert into asiakas (asiakas_id) select id from kayttajat where kayttajatunnus like ? and salasana like ? and kokonimi like ?";
         $kysely2 = getTietokantayhteys()->prepare($sql2);
         $kysely2->execute(array($kayttajatunnus, $salasana, $kokonimi));
+    }
+
+    public static function muokkaaKayttajaa($id, $kokonimi, $asiakas, $tyontekija, $johtaja) {
+        $sql = "UPDATE kayttajat SET kokonimi=? where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($kokonimi, $id));
+
+        $edellinen = Kayttaja::etsiKayttaja($id);
+
+        if ($edellinen->onAsiakas() != $asiakas) {
+
+            if ($asiakas) {
+                $sql2 = "insert into asiakas (asiakas_id) VALUES (?)";
+            } else {
+                $sql2 = "delete from asiakas where asiakas_id = ?";
+            }
+            echo $sql2 . "<br>";
+            $kysely2 = getTietokantayhteys()->prepare($sql2);
+            $kysely2->execute(array($id));
+        }
+
+        if ($edellinen->kuuluuHenkilokuntaan() != $tyontekija) {
+            if ($tyontekija) {
+                $sql3 = "insert into henkilokunta (hlo_id) VALUES (?)";
+            } else {
+                $sql3 = "delete from henkilokunta where hlo_id = ?";
+            }
+            echo $sql3 . "<br>";
+            $kysely3 = getTietokantayhteys()->prepare($sql3);
+            $kysely3->execute(array($id));
+        }
+
+        if ($edellinen->onJohtaja() != $johtaja) {
+
+            if ($johtaja) {
+                $sql4 = "insert into johto (joh_id) VALUES (?)";
+            } else {
+                $sql4 = "delete from johto where joh_id = ?";
+            }
+            echo $sql4 . "<br>";
+            $kysely4 = getTietokantayhteys()->prepare($sql4);
+            $kysely4->execute(array($id));
+        }
+    }
+
+    public static function asiakasLkm() {
+        $sql = "SELECT count(*) from asiakas";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return $tulos->count;
+        }
+    }
+
+    public static function kayttajaLkm() {
+        $sql = "SELECT count(*) from kayttajat";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return $tulos->count;
+        }
+    }
+
+    public static function henkilokuntaLkm() {
+        $sql = "SELECT count(*) from henkilokunta";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+
+        $tulos = $kysely->fetchObject();
+        if ($tulos == null) {
+            return null;
+        } else {
+            return $tulos->count;
+        }
     }
 
 }

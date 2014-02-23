@@ -6,8 +6,6 @@ require_once 'libs/models/varaus.php';
 require_once 'libs/models/palvelu.php';
 require_once 'libs/kalenteri/kalenteri_funktiot.php';
 
-$page = "index.php";
-
 require 'libs/maarita_vuosi_ja_viikko.php';
 
 if (isset($_GET['palvelu']) && filter_var($_GET['palvelu'], FILTER_VALIDATE_INT)) {
@@ -31,6 +29,8 @@ if (isset($_GET['notice'])) {
 $kalenteri = muodostaKalenteri($kysyttyPalvelu, null, $vuosi, $viikko);
 $paivamaarat = viikonpaivienTimestampit($vuosi, $viikko);
 
+$henkilokunta = isset($_SESSION['kayttaja']) && ($_SESSION['kayttaja']->kuuluuHenkilokuntaan() || $_SESSION['kayttaja']->onJohtaja());
+
 naytaNakyma("etusivuview.php", array(
     "otsikko" => "Etusivu",
     "taulukko" => $kalenteri,
@@ -39,6 +39,7 @@ naytaNakyma("etusivuview.php", array(
     "vuosi" => $vuosi,
     "paivamaarat" => $paivamaarat,
     "palvelut" => Palvelu::getPalvelut(),
-    "kysyttyPalvelu" => $kysyttyPalvelu
+    "kysyttyPalvelu" => $kysyttyPalvelu,
+    "henkilokunta" => $henkilokunta
 ));
 ?>

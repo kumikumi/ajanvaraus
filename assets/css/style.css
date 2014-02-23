@@ -67,6 +67,10 @@ margin-bottom: 8px;
 color:black;
 }
 
+tr.hoverselection:hover{
+    background-color: yellow;
+}
+
 
 #titlebar_image {
 width: 80px;

@@ -13,7 +13,7 @@ if (!empty($_GET["varausnumero"])) {
 } else if (!empty($_POST["time"]) && !empty($_POST["date"]) && !empty($_POST["staff"]) && !empty($_POST["palvelu"])) {
     $controller->luoUusiVaraus();
 } else {
-    header('Location: juusto.php');
+    header('Location: index.php');
     exit();
 }
 
@@ -139,6 +139,11 @@ class AjanvarausController {
 
     public function naytaVarausHenkilokunnanJasenelle($time, $date) {
         $varaus = Varaus::etsiTyontekijanVaraus($date, $time, $_SESSION['kayttaja']->getId());
+        if (!isset($varaus)) {
+            $_SESSION['notice'] = "Sinulle ei ole tehty varausta ". $date ." klo " . aikaviipaleTekstina($time);
+            header('Location: index.php');
+            exit();
+        }
         $asiakas = Kayttaja::etsiKayttaja($varaus->getAsiakas());
         naytaNakyma("varauksentarkasteluview.php", array(
             "varaus" => $varaus,

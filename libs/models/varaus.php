@@ -130,6 +130,21 @@ class Varaus {
         return $tulokset;
     }
 
+    public static function etsiAsiakkaanVaraukset($asiakasnro) {
+
+        $sql = "SELECT pvm, aikaviipale, palvelu, toimihlo, asiakas, asiakasnimi, varausnumero from varaus where asiakas = ?";
+
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array($asiakasnro));
+
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $varaus = new Varaus($tulos->pvm, $tulos->aikaviipale, $tulos->palvelu, $tulos->toimihlo, $tulos->asiakas, $tulos->asiakasnimi, $tulos->varausnumero);
+            $tulokset[] = $varaus;
+        }
+        return $tulokset;
+    }
+
     public static function etsiAsiakkaanVaraus($pvm, $aika, $asiakas_id) {
         $sql = "select pvm, aikaviipale, toimihlo, palvelu, asiakas, asiakasnimi, varausnumero from varaus where pvm = ? and aikaviipale = ? and asiakas = ? LIMIT 1";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -209,6 +224,7 @@ class Varaus {
     }
 
     public static function annaUusiVarausnumero() {
+        //joo en tiedä
         $sql = "select count(*), max(varausnumero) from varaus";
         $kysely = getTietokantayhteys()->prepare($sql);
         $kysely->execute();

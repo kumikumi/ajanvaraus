@@ -52,29 +52,7 @@ if (isset($_GET['id'])) {
     $valid_kesto = filter_var($_POST["kesto"], FILTER_VALIDATE_INT, $kesto_options);
     $valid_hinta = filter_var($_POST["hinta"], FILTER_VALIDATE_FLOAT);
 
-
-    $virheet = array();
-
-    if (empty($valid_nimi)) {
-        $virheet[] = "Nimi ei saa olla tyhjä";
-    }
-
-    if (empty($valid_kuvaus)) {
-        $virheet[] = "Kuvaus ei saa olla tyhjä";
-    }
-
-    if (!$valid_kesto) {
-        $virheet[] = "Kesto täytyy olla kokonaisluku väliltä 1-24";
-    }
-
-    if (!$valid_hinta) {
-        $virheet[] = "Hinnan täytyy olla desimaalimuodossa, desimaaliosan erottamiseen tulee käyttää pistettä esim. 10.00";
-    }
-
-    if ($valid_hinta < 0 || $valid_hinta >= 999) {
-        $virheet[] = "Hinnan täytyy olla väliltä 0 - 999";
-        $valid_hinta = "";
-    }
+    $virheet = Palvelu::validoiParametrit($valid_nimi, $valid_kuvaus, $valid_kesto, $valid_hinta);
 
     if (!empty($virheet)) {
 
