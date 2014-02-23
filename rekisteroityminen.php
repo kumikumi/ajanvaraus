@@ -11,7 +11,6 @@ if (isset($_SESSION['kayttaja'])) {
 
 if (!empty($_POST['submit'])) {
     $valid_nimi = filter_var($_POST["nimi"], FILTER_SANITIZE_STRING);
-    $valid_email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
     $valid_tunnus = filter_var($_POST["tunnus"], FILTER_SANITIZE_STRING);
     $valid_salasana = filter_var($_POST["password"], FILTER_SANITIZE_STRING);
     $valid_salasana_uudelleen = filter_var($_POST["password2"], FILTER_SANITIZE_STRING);

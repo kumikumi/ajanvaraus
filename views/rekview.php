@@ -9,13 +9,11 @@
 
         <?php if (isset($data->kayttaja)): ?>
             Asiakkaan nimi: <input type="text" name="nimi" value="<?php echo $data->kayttaja->getKokonimi() ?>"><br>
-            S-postiosoite: <input type="text" name="email"><br>
             käyttäjätunnus: <input type="text" name="tunnus"><?php echo $data->kayttaja->getKayttajatunnus() ?><br>
             salasana: <input type="password" name="password"><br>
             salasana uudelleen: <input type="password" name="password2">
         <?php else: ?>
             Asiakkaan nimi: <input type="text" name="nimi"><br>
-            S-postiosoite: <input type="text" name="email"><br>
             käyttäjätunnus: <input type="text" name="tunnus"><br>
             salasana: <input type="password" name="password"><br>
             salasana uudelleen: <input type="password" name="password2">
