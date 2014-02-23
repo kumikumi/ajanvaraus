@@ -4,7 +4,7 @@
 
 <div id="page">
 
-    <?php if (isset($kayttaja) && $kayttaja->kuuluuHenkilokuntaan()): ?>
+    <?php if (isset($kayttaja) && ($kayttaja->kuuluuHenkilokuntaan()|| $kayttaja->onJohtaja())): ?>
         <a href="muokkaapalvelua.php?id=-1">Lisää uusi palvelu</a>
     <?php endif; ?>
 
@@ -14,7 +14,7 @@
             <?php echo $palvelu->getNimi(), ' (', $palvelu->getKesto() * 30, 'min)'; ?>
         </h2>
 
-        <?php if (isset($kayttaja) && $kayttaja->kuuluuHenkilokuntaan()): ?>
+        <?php if (isset($kayttaja) && ($kayttaja->kuuluuHenkilokuntaan() || $kayttaja->onJohtaja())): ?>
             <form action="poistapalvelu.php" method="POST">
                 <input type="hidden" name="id" value="<?php echo $palvelu->getId() ?>">
                 <a href="muokkaapalvelua.php?id=<?php echo $palvelu->getId() ?>">muokkaa</a>

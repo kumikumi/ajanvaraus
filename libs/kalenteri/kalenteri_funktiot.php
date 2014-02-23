@@ -1,5 +1,8 @@
 <?php
 
+/*
+ * Palauttaa taulukon, joka sisältää parametrina annetun viikon jokaisen viikonpäivän alkamishetken UNIX-aikaleimat parametrina annettuna vuonna.
+ */
 function viikonpaivienTimestampit($vuosi, $viikko) {
     $palautus = array();
 
@@ -15,6 +18,11 @@ function viikonpaivienTimestampit($vuosi, $viikko) {
     return $palautus;
 }
 
+/*
+ * Palauttaa kaksiuloitteisen työvuorokalenterin parametrina annetulle työntekijälle parametreina annetulle viikolle parametrina annettuna vuonna.
+ * Ajat, jotka on merkitty työntekijän työajoiksi, mutta joille ei ole tehty varausta, on merkitty tunnuksella 0. Ajat, joille on tehty varaus,
+ * sisältävät taulukossa kyseisen varaus-olion.
+ */
 function muodostaTyovuoroKalenteri($kysyttyHenkilo, $vuosi, $viikko) {
     require_once 'libs/models/varaus.php';
     $tyovuorot = Tyovuoro::haeHenkilonTyovuorot($kysyttyHenkilo);
@@ -33,8 +41,14 @@ function muodostaTyovuoroKalenteri($kysyttyHenkilo, $vuosi, $viikko) {
     return $kalenteri;
 }
 
-function muodostaKalenteri($kysyttyPalvelu, $kysyttyHenkilo, $vuosi, $viikko) {
-    $taulukko = muodostaTaulukko($kysyttyPalvelu, $kysyttyHenkilo, $vuosi, $viikko);
+/*
+ * Palauttaa kaksiuloitteisen ajanvarauskalenterin parametrina annetulle vuodelle ja viikolle, josta ilmenee kyseisenä hetkenä vapaana 
+ * olevat ajat, sekä mahdolliset tämänhetkisen käyttäjän omat varaukset. Parametrina voidaan antaa kysytty palvelu, joka suodattaa kalenterista
+ * pois kaikki muut paitsi kyseiseen palveluun liittyvät vapaat ajat.
+ * 
+ */
+function muodostaKalenteri($kysyttyPalvelu, $vuosi, $viikko) {
+    $taulukko = muodostaTaulukko($kysyttyPalvelu, $vuosi, $viikko);
 
     $kalenteri = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
 
@@ -64,7 +78,11 @@ function muodostaKalenteri($kysyttyPalvelu, $kysyttyHenkilo, $vuosi, $viikko) {
     return $kalenteri;
 }
 
-function muodostaTaulukko($kysyttyPalvelu, $kysyttyHenkiloId, $vuosi, $viikko) {
+/*
+ * Palauttaa kolmiuloitteisen ajanvaraustaulukon parametrina annetulle vuodelle ja viikolle. 
+ */
+
+function muodostaTaulukko($kysyttyPalvelu, $vuosi, $viikko) {
     require_once 'libs/models/varaus.php';
     $taulukko = array("MA" => array(), "TI" => array(), "KE" => array(), "TO" => array(), "PE" => array(), "LA" => array(), "SU" => array());
     if ($kysyttyPalvelu) {
@@ -100,6 +118,11 @@ function muodostaTaulukko($kysyttyPalvelu, $kysyttyHenkiloId, $vuosi, $viikko) {
     return $taulukko;
 }
 
+/*
+ * Palauttaa tiedon siitä, montako vapaata aikaa parametrina annetulla työntekijällä on alkaen 
+ * parametrina annetusta aikaviipaleesta parametrina annetussa ajanvaraustaulukossa
+ * parametrina annettuna viikonpaivana
+ */
 function vapaitaPerakkain($taulukko, $viikonpv, $aikaviipale, $tyontekija_id) {
     $palautus = 0;
     while (isset($taulukko[$viikonpv][$aikaviipale][$tyontekija_id]) && ($taulukko[$viikonpv][$aikaviipale][$tyontekija_id] == "available" || $taulukko[$viikonpv][$aikaviipale][$tyontekija_id] == "not_enough_time") && $aikaviipale < 24) {
@@ -110,6 +133,11 @@ function vapaitaPerakkain($taulukko, $viikonpv, $aikaviipale, $tyontekija_id) {
     return $palautus;
 }
 
+/*
+ * Jatkaa parametrina annettua varausta parametrina annetussa taulukossa halutulla kestolla. 
+ * (Jos varaus on tehty useamman aikaviipaleen kestävälle palvelulle, tätä metodia tulee käyttää
+ * että ajat tulevat asianmukaisesti varatuiksi)
+ */
 function jatkaVarausta($taulukko, $viikonpv, $aikaviipale, $tyontekija_id, $kesto) {
     //echo "jatkaVarausta(". $taulukko .", ". $viikonpv. ", ". $aikaviipale.", ". $tyontekija_id .", ".$kesto.")<br>";
     $tila = $taulukko[$viikonpv][$aikaviipale][$tyontekija_id];
@@ -134,6 +162,9 @@ function jatkaVarausta($taulukko, $viikonpv, $aikaviipale, $tyontekija_id, $kest
     return $taulukko;
 }
 
+/*
+ * Merkitsee parametrina annetun palvelun suorittamisen kannalta liian lyhyet aikavälit erillisellä merkinnällä
+ */
 function poistaLiianLyhyetAjat($taulukko, $kysyttyPalvelu) {
     foreach ($taulukko as $viikonpvnimi => $aikaviipaleet) {
         foreach ($aikaviipaleet as $aikaviipale => $tyontekijat) {
@@ -149,6 +180,10 @@ function poistaLiianLyhyetAjat($taulukko, $kysyttyPalvelu) {
     return $taulukko;
 }
 
+/*
+ * Laittaa parametrina annetun kalenterin menneet ajat täyteen mustaa. Parametrinä täytyy antaa tieto
+ * siitä, miltä vuodelta ja viikolta kyseinen kalenteri on. 
+ */
 function poistaMenneetAjat($kalenteri, $vuosi, $viikko) {
     $timestampit = viikonpaivienTimestampit($vuosi, $viikko);
     foreach ($kalenteri as $viikonpvnimi => $aikaviipaleet) {

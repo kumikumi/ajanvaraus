@@ -19,6 +19,7 @@
         <?php endif; ?>
 
         <?php if ($data->kayttaja->kuuluuHenkilokuntaan()): ?>
+            <a href="tyovuorojenmuokkaus.php?id=<?php echo $data->kayttaja->getId(); ?>">Muokkaa työvuoroja</a><br>
             <p>Palvelut: </p>
             <?php foreach ($data->palvelut as $palvelu): ?>
             <input type="checkbox" name="t[]" value="<?php echo $palvelu->getId(); ?>" <?php if (in_array($palvelu->getId(), $data->tyontekijanPalvelut)): ?>checked<?php endif; ?>><?php echo $palvelu->getNimi(); ?><br>

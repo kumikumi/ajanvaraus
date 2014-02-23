@@ -44,7 +44,7 @@ if (!empty($_POST['id'])) {
     exit();
 } else {
 
-    if (isset($_GET['id'])) {
+    if (isset($_GET['id']) && $_GET['id']) {
 
         if (($_GET['id'] != $_SESSION['kayttaja']->getId()) && !($_SESSION['kayttaja']->kuuluuHenkilokuntaan() || $_SESSION['kayttaja']->onJohtaja())) {
             header('Location: kayttaja.php');

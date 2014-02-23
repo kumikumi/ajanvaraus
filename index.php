@@ -16,7 +16,7 @@ if (isset($_GET['palvelu']) && filter_var($_GET['palvelu'], FILTER_VALIDATE_INT)
 
 $ilmoitus = null;
 
-$kalenteri = muodostaKalenteri($kysyttyPalvelu, null, $vuosi, $viikko);
+$kalenteri = muodostaKalenteri($kysyttyPalvelu, $vuosi, $viikko);
 $paivamaarat = viikonpaivienTimestampit($vuosi, $viikko);
 
 $henkilokunta = isset($_SESSION['kayttaja']) && ($_SESSION['kayttaja']->kuuluuHenkilokuntaan() || $_SESSION['kayttaja']->onJohtaja());

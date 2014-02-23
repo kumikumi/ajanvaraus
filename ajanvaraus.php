@@ -92,7 +92,7 @@ class AjanvarausController {
                  * lomakkeeseen haluamansa palvelun. Suhtaudutaan tähän siivoamalla ylimääräiset parametrit urlista pois eli
                  * ohjaamalla käyttäjä tälle sivulle parametreinään päivämäärä, aikaviipale ja palvelu
                  */
-                header('Location: ajanvaraus.php?date=' . $_GET['date'] . "&time=" . $_GET['time'] . "&palvelu=" . $_GET['palvelu']);
+                header('Location: ajanvaraus.php?date=' . $_GET['date'] . "&time=" . $_GET['time'] . "&palvelu=" . $_GET['palvelu'] . "&nimi=" . $_GET["nimi"]);
                 exit();
             }
             return (int) $_GET['palvelu'];
@@ -122,7 +122,7 @@ class AjanvarausController {
             $kysyttyPalveluId = $this->maaritaKysyttyPalvelu();
             $tyontekijat = Kayttaja::haeVapaanaOlevatTyontekijatJotkaOsaavatJaEhtivatTehdaTiettyaPalveluaTiettyynAikaan($_GET['date'], $_GET['time'], $kysyttyPalveluId);
             if (isset($_SESSION['kayttaja']) && $_SESSION['kayttaja']->onAsiakas()) {
-                $this->naytaVarausNakymaKirjautuneelleAsiakkaalle($date, $time, $kysyttyPalveluId, $tyontekijat);
+                $this->naytaVarausNakymaKirjautuneelleAsiakkaalle($date, $time);
             } else {
                 $this->naytaVarausNakymaKirjautumattomalleAsiakkaalle($date, $time, $kysyttyPalveluId, $tyontekijat);
             }
@@ -188,6 +188,9 @@ class AjanvarausController {
 
     public function naytaVarausNakymaKirjautumattomalleAsiakkaalle($date, $time, $kysyttyPalveluId, $tyontekijat) {
         $uusiVaraus = new Varaus($date, $time, $kysyttyPalveluId, 0, 0, "", "");
+        if (isset($_GET['nimi'])) {
+            $uusiVaraus->setAsiakasnimi($_GET['nimi']);
+        }
         naytaNakyma("varauksenmuokkausview.php", array(
             "otsikko" => "Uusi ajanvaraus",
             "varaus" => $uusiVaraus,
