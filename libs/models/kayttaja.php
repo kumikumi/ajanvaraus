@@ -259,7 +259,12 @@ class Kayttaja {
         }
         return $tulokset;
     }
-
+    
+    /*
+     * Miljoonan dollarin liikesalaisuus eli funktio, joka hankkii listan saatavilla olevista työntekijöistä, jotka osaavat ja tiettynä aikana ehtivät suorittaa tietyn palvelun.
+     * Jotta työntekijä palautettaisiin listassa, hänen pitää olla saatavilla (siis; hänellä pitää olla työaikoja, joihin ei ole liitetty varausta)
+     * parametrina annetusta ajanhetkestä eteenpäin niin monta aikaviipaletta, kuin parametrina osoitetulla palvelulla on kestoa.
+     */
     public static function haeVapaanaOlevatTyontekijatJotkaOsaavatJaEhtivatTehdaTiettyaPalveluaTiettyynAikaan($pvm, $aikaviipale, $palvelu_id) {
         require_once 'libs/kalenteri/kalenteri_funktiot.php';
         require_once 'libs/models/tyovuoro.php';

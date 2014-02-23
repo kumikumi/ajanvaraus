@@ -11,11 +11,21 @@
         <ul>
             <li><input type="checkbox" name="henkilokunta" value="true" <?php if ($data->kayttaja->kuuluuHenkilokuntaan()): ?>checked<?php endif; ?>>Henkilökunnan jäsen</li>
             <li><input type="checkbox" name="asiakas" value="true" <?php if ($data->kayttaja->onAsiakas()): ?>checked<?php endif; ?>>Asiakas</li>
-            <?php if ($data->kayttaja->onAsiakas()): ?>
-                <li>Asiakassaldo: <?php echo $data->kayttaja->getSaldo() ?></li>
-            <?php endif; ?>
             <li><input type="checkbox" name="johtaja" value="true" <?php if ($data->kayttaja->onJohtaja()): ?>checked<?php endif; ?>>Johtaja</li>
         </ul>
+
+        <?php if ($data->kayttaja->onAsiakas()): ?>
+            <p>Asiakassaldo: <?php echo $data->kayttaja->getSaldo() ?></p>
+        <?php endif; ?>
+
+        <?php if ($data->kayttaja->kuuluuHenkilokuntaan()): ?>
+            <p>Palvelut: </p>
+            <?php foreach ($data->palvelut as $palvelu): ?>
+            <input type="checkbox" name="t[]" value="<?php echo $palvelu->getId(); ?>" <?php if (in_array($palvelu->getId(), $data->tyontekijanPalvelut)): ?>checked<?php endif; ?>><?php echo $palvelu->getNimi(); ?><br>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+        
         <button type="submit">Tallenna muutokset</button>
     </form>
 </div>

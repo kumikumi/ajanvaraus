@@ -1,6 +1,7 @@
 <?php
 
 require_once 'libs/common.php';
+require_once 'libs/models/palvelu.php';
 
 if (!isset($_SESSION['kayttaja'])) {
     $_SESSION['virhe'] = "Et ole kirjautunut sisään tai istuntosi on vanhentunut. Kirjaudu sisään ja yritä uudelleen.";
@@ -23,6 +24,10 @@ if (!empty($_POST['id'])) {
 
     if (!empty($_POST['henkilokunta'])) {
         $tyontekija = true;
+        
+        if (!empty($_POST['t'])) {
+            Palvelu::setTyontekijanPalvelut($_POST['id'], $_POST['t']);
+        }
     } else {
         $tyontekija = false;
     }
@@ -35,7 +40,7 @@ if (!empty($_POST['id'])) {
 
     Kayttaja::muokkaaKayttajaa($_POST['id'], $_POST['nimi'], $asiakas, $tyontekija, $johtaja);
     $_SESSION['notice'] = "Muutokset tallennettu.";
-    header('Location: kayttajat.php');
+    header('Location: kayttaja.php?id='.$_POST['id']);
     exit();
 } else {
 
@@ -51,16 +56,23 @@ if (!empty($_POST['id'])) {
         $kayttaja = $_SESSION['kayttaja'];
     }
 
+    $palvelut = Palvelu::getPalvelut();
+    $tyontekijanPalvelut = Palvelu::getTyontekijanPalveluIdt($kayttaja->getId());
+
     if ($_SESSION['kayttaja']->onJohtaja()) {
         naytaNakyma("kayttajanmuokkausview.php", array(
             "otsikko" => $kayttaja->getKokonimi(),
-            "kayttaja" => $kayttaja
+            "kayttaja" => $kayttaja,
+            "palvelut" => $palvelut,
+            "tyontekijanPalvelut" => $tyontekijanPalvelut
         ));
         exit();
     } else {
         naytaNakyma("kayttajaview.php", array(
             "otsikko" => $kayttaja->getKokonimi(),
-            "kayttaja" => $kayttaja
+            "kayttaja" => $kayttaja,
+            "palvelut" => $palvelut,
+            "tyontekijanPalvelut" => $tyontekijanPalvelut
         ));
     }
 }

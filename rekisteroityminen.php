@@ -4,6 +4,7 @@ require_once 'libs/common.php';
 require_once 'libs/tietokantayhteys.php';
 
 if (isset($_SESSION['kayttaja'])) {
+    $_SESSION['virhe'] = "Mitähän järkeä tossakin nyt oli, sullahan on jo tunnus tänne";
     header('Location: index.php');
     exit();
 }

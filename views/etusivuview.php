@@ -5,7 +5,7 @@
         <p>
             Rekisteröidy kanta-asiakkaaksi ja saat paremmat edut
         </p>
-        <p><a href="reksivu.html">paina tosta</a></p>
+        <p><a href="rekisteroityminen.php">paina tosta</a></p>
     </div>
     <div id="sidebar_box">
         <p>
