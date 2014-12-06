@@ -27,14 +27,10 @@ class AjanvarausController {
     public function __construct() {
         
     }
-
     /*
      * Tilanne, jossa rekisteröimätön asiakas haluaa nähdä varauksensa, ja on antanut varausnumeron get-parametrina
      */
-
     public function naytaVarausVarausnumeronPerusteella() {
-
-
         if (isset($_GET["date"])) {
             /*
              * Jos tuli ylimääräisiä get-parametrejä (esim. "date"), käyttäjä on submitannut formin halutessaan päivittää
@@ -166,7 +162,7 @@ class AjanvarausController {
             ));
         } else {
             $kysyttyPalveluId = $this->maaritaKysyttyPalvelu();
-            $tyontekijat = Kayttaja::haeVapaanaOlevatTyontekijatJotkaOsaavatJaEhtivatTehdaTiettyaPalveluaTiettyynAikaan($varaus->getPvm(), $varaus->getAikaviipale(), $kysyttyPalveluId);
+            $tyontekijat = Kayttaja::haeVapaanaOlevatTyontekijatJotkaOsaavatJaEhtivatTehdaTiettyaPalveluaTiettyynAikaan($date, $time, $kysyttyPalveluId);
             $uusiVaraus = new Varaus($date, $time, $kysyttyPalveluId, 0, 0, "", "");
             $uusiVaraus->setAsiakas($_SESSION['kayttaja']->getId());
             $uusiVaraus->setAsiakasnimi($_SESSION['kayttaja']->getKokonimi());
