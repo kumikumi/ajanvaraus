@@ -163,7 +163,7 @@ class Palvelu {
             $valid_hinta = "";
         }
 
-        return virheet;
+        return $virheet;
     }
 
 }
